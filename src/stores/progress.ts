@@ -9,6 +9,7 @@ export type ItemRequirement = {
   count: number
   needed: number
   finished: boolean
+  stations: Array<string>
 }
 
 export const useProgressStore = defineStore('progress', () => {
@@ -69,16 +70,18 @@ export const useProgressStore = defineStore('progress', () => {
       {
         for(const ir of hl.itemRequirements)
         {
-          let new_item: ItemRequirement = {
+          const new_item: ItemRequirement = {
             id: ir.item.id,
             needed: ir.count,
             item: ir.item,
             count: 0,
             finished: false,
+            stations: [hs.name + " " + hl.level],
           }
           if (item_total_needed_map.value.has(ir.item.id))
           {
             new_item.needed += item_total_needed_map.value.get(ir.item.id)!.needed
+            new_item.stations.push(...item_total_needed_map.value.get(ir.item.id)!.stations)
           }
 
           item_total_needed_map.value.set(new_item.id, new_item)
@@ -92,6 +95,7 @@ export const useProgressStore = defineStore('progress', () => {
     item_total_owned_map.value.clear()
     for (const p of hideoutPartsProgress.value)
     {
+      const hideout_station_name = hideout_station_store.get_hideout_station_name_from_item_requirement_id(p.id)
       const hideout_item_requirement = hideout_station_store.get_item_requirement_from_id(p.id)
       if (hideout_item_requirement === undefined)
       {
@@ -104,19 +108,51 @@ export const useProgressStore = defineStore('progress', () => {
         count: p.count,
         needed: item_total_needed_map.value.get(hideout_item_requirement!.item.id)!.needed,
         finished: false,
+        stations: [hideout_station_name!],
       }
 
       if (item_total_owned_map.value.has(new_item.id))
       {
         new_item.count += item_total_owned_map.value.get(new_item.id)!.count
+        new_item.stations.push(...item_total_owned_map.value.get(new_item.id)!.stations)
       }
 
+      item_total_owned_map.value.set(new_item.id, new_item)
+    }
+
+    for (const p of hideoutModulesProgress.value)
+    {
+      if (p.complete)
+      {
+        const hideout_station_name = hideout_station_store.get_hideout_station_name_from_level_id(p.id)
+        for (const hideout_item_requirement of hideout_station_store.get_level_requirement_from_id(p.id))
+        {
+          const new_item: ItemRequirement = {
+            id: hideout_item_requirement!.item.id,
+            item: hideout_item_requirement!.item,
+            count: hideout_item_requirement!.count,
+            needed: item_total_needed_map.value.get(hideout_item_requirement!.item.id)!.needed,
+            finished: false,
+            stations: [hideout_station_name!],
+          }
+
+          if (item_total_owned_map.value.has(new_item.id))
+          {
+            new_item.count += item_total_owned_map.value.get(new_item.id)!.count
+            new_item.stations.push(...item_total_owned_map.value.get(new_item.id)!.stations)
+          }
+
+          item_total_owned_map.value.set(new_item.id, new_item)
+        }
+      }
+    }
+
+    for (const new_item of item_total_owned_map.value.values())
+    {
       if (new_item.count >= new_item.needed)
       {
         new_item.finished = true
       }
-
-      item_total_owned_map.value.set(new_item.id, new_item)
     }
   }
 

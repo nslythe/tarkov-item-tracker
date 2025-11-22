@@ -29,6 +29,12 @@
           <v-col v-for="item in progress_store.item_total_owned" :cols="cols_factor">
             <v-card :color="card_color_for_item_requirement(item)">
               <v-card-text>
+                <v-tooltip activator="parent" location="start">
+                  <p v-for="hideout_station in item.stations">
+                  {{ hideout_station }}
+                  </p>
+                </v-tooltip>
+
                 <v-img height="64" :src="item.item.iconLink" />
                 <p class="text-center">
                 {{ item.count }} / {{ item.needed }}

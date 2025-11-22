@@ -102,12 +102,57 @@ export const useHideoutStationStore = defineStore('hideout_station', () => {
     return return_value
   }
 
+  const get_hideout_station_name_from_item_requirement_id = function(item_requirement_id: string)
+  {
+    if (hideout_station.value === undefined)
+    {
+      return undefined
+    }
+
+    for (const hs of hideout_station.value)
+    {
+      for(const hl of hs.levels)
+      {
+        for(const ir of hl.itemRequirements)
+        {
+          if (ir.id === item_requirement_id)
+          {
+            return hs.name + " " + hl.level
+          }
+        }
+      }
+    }
+    return undefined;
+  }
+
+  const get_hideout_station_name_from_level_id = function(level_requirement_id: string)
+  {
+    if (hideout_station.value === undefined)
+    {
+      return undefined
+    }
+
+    for (const hs of hideout_station.value)
+    {
+      for (const hl of hs.levels)
+      {
+        if (hl.id == level_requirement_id)
+        {
+          return hs.name + " " + hl.level
+        }
+      }
+    }
+    return undefined
+  }
 
   return {
     loaded,
     load,
     hideout_station,
     get_item_requirement_from_id,
+    get_level_requirement_from_id,
+    get_hideout_station_name_from_item_requirement_id,
+    get_hideout_station_name_from_level_id
   }
 
 })
