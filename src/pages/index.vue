@@ -1,25 +1,30 @@
 <template>
   <v-container>
-    <v-text-field
-      :append-icon="show_token ? 'mdi-eye' : 'mdi-eye-off'"
-      v-model="progress_store.tarkov_tracker_token"
-      @keydown.enter="tarkov_tracker_token_updated"
-      :type="show_token ? 'text' : 'password'"
-      @click:append="show_token = !show_token"/>
+    <v-container>
+      <a href="https://github.com/nslythe/tarkov-item-tracker">
+        <font-awesome-icon color="white" white="64" :icon="['fab', 'github']" />
+      </a>
+      <v-text-field
+        class="mt-3"
+        :append-icon="show_token ? 'mdi-eye' : 'mdi-eye-off'"
+        v-model="progress_store.tarkov_tracker_token"
+        @keydown.enter="tarkov_tracker_token_updated"
+        :type="show_token ? 'text' : 'password'"
+        @click:append="show_token = !show_token"/>
 
     <v-btn @click="refresh_progress">Refresh</v-btn>
-
-
-    <v-container v-if="progress_store.tarkov_tracker_token === null">
-      Configure
     </v-container>
 
-    <v-container v-else>
-      <v-container v-if="!progress_store.loaded || !hideout_station_store.loaded">
-        <v-skeleton-loader type="card"></v-skeleton-loader>
-      </v-container>
+    <div v-if="progress_store.tarkov_tracker_token === null">
+      Configure
+    </div>
+
+    <div v-else>
+      <div v-if="!progress_store.loaded || !hideout_station_store.loaded">
+        <v-skeleton-loader type="table-row"></v-skeleton-loader>
+      </div>
       
-      <v-container v-else>
+      <div v-else>
         <v-row>
           <v-col v-for="item in progress_store.item_total_owned" cols="1">
             <v-card :color="card_color_for_item_requirement(item)">
@@ -32,8 +37,8 @@
             </v-card>
           </v-col>
         </v-row>
-      </v-container>
-    </v-container>
+      </div>
+    </div>
   </v-container>
 </template>
 
