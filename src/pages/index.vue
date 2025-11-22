@@ -37,7 +37,7 @@
 
                 <v-img height="64" :src="item.item.iconLink" />
                 <p class="text-center">
-                  {{ item.count }} / {{ item.needed }}
+                  {{ item.needed - item.count}}
                 </p>
               </v-card-text>
             </v-card>
