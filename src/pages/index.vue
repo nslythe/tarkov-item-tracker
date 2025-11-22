@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div>
     <v-container>
       <a href="https://github.com/nslythe/tarkov-item-tracker">
         <font-awesome-icon color="white" white="64" :icon="['fab', 'github']" />
@@ -26,7 +26,7 @@
       
       <div v-else>
         <v-row>
-          <v-col v-for="item in progress_store.item_total_owned" cols="1">
+          <v-col v-for="item in progress_store.item_total_owned" :cols="cols_factor">
             <v-card :color="card_color_for_item_requirement(item)">
               <v-card-text>
                 <v-img height="64" :src="item.item.iconLink" />
@@ -39,7 +39,7 @@
         </v-row>
       </div>
     </div>
-  </v-container>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -51,13 +51,31 @@
   const progress_store = useProgressStore()
 
   const show_token = ref<boolean>(false)
+  const cols_factor = ref<number>(2)
 
   onMounted(async () => {
+    resize()
     progress_store.init()
     await progress_store.load()
     await hideout_station_store.load()
     progress_store.calculate()
   })
+
+  window.addEventListener("resize", function()
+  {
+    resize()
+  });
+
+  const resize = async function()
+  {
+    if (window.innerHeight > window.innerWidth)
+    {
+      cols_factor.value = 2;
+    }else{
+      cols_factor.value = 1;
+    }
+  }
+
 
   const refresh_progress = async function()
   {
