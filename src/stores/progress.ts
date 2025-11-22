@@ -137,15 +137,6 @@ export const useProgressStore = defineStore('progress', () => {
         return -1
       }
 
-      if (a.needed - a.count > b.needed - b.count)
-      {
-        return 1
-      }
-      if (a.needed - a.count < b.needed - b.count)
-      {
-        return -1
-      }
-
       return a.item.name.localeCompare(b.item.name)
     });
   })
