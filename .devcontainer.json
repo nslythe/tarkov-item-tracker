@@ -1,0 +1,14 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/typescript-node",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "streetsidesoftware.code-spell-checker",
+        "jcbuisson.vue",
+        "Vue.volar"
+      ]
+    }
+  },
+  "appPort": [ 3591 ]
+}
