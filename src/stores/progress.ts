@@ -26,7 +26,6 @@ export const useProgressStore = defineStore('progress', () => {
   const init = function()
   {
     tarkov_tracker_token.value = localStorage.getItem('tarkov_tracker_token')
-    console.log(tarkov_tracker_token.value)
   }
 
   const load = async function()

@@ -21,7 +21,7 @@
       
       <v-container v-else>
         <v-row>
-          <v-col v-for="item in progress_store.item_total_owned" cols="3">
+          <v-col v-for="item in progress_store.item_total_owned" cols="1">
             <v-card :color="card_color_for_item_requirement(item)">
               <v-card-text>
                 <v-img height="64" :src="item.item.iconLink" />
@@ -71,7 +71,10 @@
 
   const tarkov_tracker_token_updated = function()
   {
-    localStorage.setItem('tarkov_tracker_token', progress_store.tarkov_tracker_token)
-    refresh_progress()
+    if (progress_store.tarkov_tracker_token !== undefined)
+    {
+      localStorage.setItem('tarkov_tracker_token', progress_store.tarkov_tracker_token!)
+      refresh_progress()
+    }
   }
 </script>
